@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <form id="login-form" method="POST">
+            <input type="text" name="username" placeholder="Your Username" />
+            <input type="password" name="password" placeholder="Your Password">
+            <input type="submit" value="Login" />
+        </form>
+
+
+        <div><h3>File List</h3>
+            <div id="content-container"></div>
+        </div>
+
+        
+
+        <div><h3>File Uplaod</h3>
+            <form id="upload-form" method="POST" enctype="multipart/form-data">
+                <input type="file" name="inp-file" id="inp-file" />
+                <input type="submit" value="Upload" />
+            </form>
+        </div>
+        
+        <div id="hits"></div>
+        <script src="./client.js"></script>
+
+    </body>
+</html>
