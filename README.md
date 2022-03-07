@@ -10,7 +10,14 @@ Web application that provides a REST API for logged-in users to upload and downl
 python manage.py test
 ```
 
-### REST API Backend server(Django)
+### REST API Backend server(Django) with Docker
+
+```
+docker build --tag file-manager .
+docker run --publish 8000:8000 file-manager
+```
+
+### REST API Backend server(Django) without Docker
 
 To Run the backend server,navigate to the `backend` folder and run the following commands
 
