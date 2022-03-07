@@ -6,6 +6,8 @@ Web application that provides a REST API for logged-in users to upload and downl
 
 ### Run Test
 
+Navigate to `backend` folder and the following command
+
 ```
 python manage.py test
 ```
@@ -34,7 +36,7 @@ Your backend server will be running on `localhost:8000/api/`
 
 ### Frontend server(Javascript)
 
-Start the frontend server by navigating to the js_client folder and run the following commands, assuming your virtual environment is running
+Start the frontend server by navigating to the js_client folder and run the following commands, assuming your virtual environment is created
 
 ```
 source env/bin/activate
