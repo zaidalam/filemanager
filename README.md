@@ -4,19 +4,26 @@ Web application that provides a REST API for logged-in users to upload and downl
 
 ## Getting started
 
-### REST API Backend server(Django)
-
-Navigate to the `backend` folder and run the following commands
+### Run Test
 
 ```
-python3.9 -m venv env(or python 3)
+python manage.py test
+```
+
+### REST API Backend server(Django)
+
+To Run the backend server,navigate to the `backend` folder and run the following commands
+
+```
+python3.9 -m venv venv(or python 3)
 source env/bin/activate
 pip install -r requirements.txt
+python manage.py migrate
 python manage.py runserver
 
 ```
 
-Your backend server will be running on `localhost:8000`
+Your backend server will be running on `localhost:8000/api/`
 
 ### Frontend server(Javascript)
 
