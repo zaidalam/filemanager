@@ -2,6 +2,8 @@
 
 Web application that provides a REST API for logged-in users to upload and download files. Each user belongs to an organization and can upload files that will belong to the same organization as the user. Users should see and be able to download any of the uploaded files from any organization. Keep track of how many times each file has been downloaded, and also how many total file downloads each organization has. The application uses Dockers, Django and Django REST Framework.
 
+Note:The commands are based on MacOS(unix system) so if you have Windows they will be different for virtual environment setup
+
 ## Getting started
 
 Since the API does not provide user registration for now. we need to create user using Django.You will have to create a user by running the command in the terminal `python manage.py createsuperuser` and then go to the admin panel `localhost:8000/admin` to link the user to the Employee and create Organization as well.Then you can use that user to access the API in the frontend
