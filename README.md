@@ -4,6 +4,8 @@ Web application that provides a REST API for logged-in users to upload and downl
 
 ## Getting started
 
+Since the API does not provide user registration for now. we need to create user using Django.You will have to create a user by running the command in the terminal `python manage.py createsuperuser` and then go to the admin panel `localhost:8000/admin` to link the user to the Employee and create Organization as well.Then you can use that user to access the API in the frontend
+
 ### Run Test
 
 Navigate to `backend` folder and the following command

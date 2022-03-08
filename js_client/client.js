@@ -38,15 +38,18 @@ function handleLogin(event) {
         })
 }
 
-
+// Stores Auth Data in Javascript localStorage
 function handleAuthData(authData, callback) {
     localStorage.setItem('access', authData.access)
     localStorage.setItem('refresh', authData.refresh)
     localStorage.setItem('user_id',  parseJwt(authData.access)['user_id'])
+    getUser()
     if (callback) {
         callback()
     }
 }
+
+// Get File List from API endpoint
 function getFileList() {
     const endpoint = `${baseEndpoint}/files/`
     const options = getFetchOptions()
@@ -63,6 +66,7 @@ function getFileList() {
         })
 }
 
+// Get User information from API endpoint
 function getUser() {
     const endpoint = `${baseEndpoint}/users/${localStorage.getItem('user_id')}`
     const options = getFetchOptions()
@@ -73,29 +77,71 @@ function getUser() {
         .then(data => {
             const validData = isTokenNotValid(data)
             if (validData) {
-                writeToContainer(data)
+                localStorage.setItem('organization', data['organization'])
             }
 
         })
 }
 
-function writeToContainer(data) {
-    if (contentContainer) {
-        contentContainer.innerHTML = "<pre>" + JSON.stringify(data, null, 4) + "</pre>"
+// Get download file from API endpoint
+function downloadFile(fileId,fileName) {
+    const endpoint = `${baseEndpoint}/files/${fileId}`
+    const options = {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem('access')}`
+        }
+    }
+    fetch(endpoint, options)
+    .then((res) => { return res.blob(); })
+    .then((data) => {
+    var a = document.createElement("a");
+    a.href = window.URL.createObjectURL(data);
+    a.download = fileName;
+    a.click();
+    });
+}
+
+// Create dynamic HTML and event handlers for file listing
+function createFileListing(data,parentContainer){
+    for (i in data) {
+        const divContainer = document.createElement("div");
+        const name = document.createElement("span");
+        const linkSpan = document.createElement("span");
+        const link = document.createElement("a");
+        name.innerText = data[i].name
+        link.innerText = "Download";
+        link.href = "#";
+        link.addEventListener('click',function () {
+            downloadFile(data[i].id,data[i].name)
+        })
+
+        linkSpan.append(link)
+        divContainer.append(name,linkSpan)
+        parentContainer.append(divContainer)
     }
 }
 
-function getFetchOptions(method, body) {
+// Writes data to HTML container div
+function writeToContainer(data) {
+    if (contentContainer) {
+        createFileListing(data,contentContainer)
+    }
+}
+
+// Generic function for setting options for header request to API
+function getFetchOptions(method, body, contentType) {
     return {
         method: method === null ? "GET" : method,
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": contentType ? contentType : "application/json",
             "Authorization": `Bearer ${localStorage.getItem('access')}`
         },
         body: body ? body : null
     }
 }
 
+// Check to see if the token still still valid
 function isTokenNotValid(jsonData) {
     if (jsonData.code && jsonData.code === "token_not_valid") {
         // run a refresh token fetch
@@ -105,6 +151,7 @@ function isTokenNotValid(jsonData) {
     return true
 }
 
+// Validate token through API
 function validateJWTToken() {
     // fetch
     const endpoint = `${baseEndpoint}/token/verify/`
@@ -124,12 +171,13 @@ function validateJWTToken() {
         })
 }
 
+// Upload file to backend using API endpoint
 function handleFileUpload(event) {
     event.preventDefault()
     const uploadEndpoint = `${baseEndpoint}/files/`
     let uploadFormData = new FormData()
     uploadFormData.append("file", inpFile.files[0])
-    uploadFormData.append("organization", inpFile.files[0])
+    uploadFormData.append("organization", localStorage.getItem('organization'))
     const options = {
         method: "POST",
         headers: {
@@ -144,13 +192,14 @@ function handleFileUpload(event) {
     .then(data => {
         const validData = isTokenNotValid(data)
         if (validData) {
-            writeToContainer(data)
+            getFileList()
         }
 
     })
 
 }
 
+// Parse JWT token to get user id 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -160,4 +209,6 @@ function parseJwt (token) {
 
     return JSON.parse(jsonPayload);
 };
+
+// Get all files from backend and render them in HTML
 getFileList()
